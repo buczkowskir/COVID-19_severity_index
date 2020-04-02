@@ -22,7 +22,7 @@ curl::curl_download(census_file, destfile) #downloading file from census
 
 read_xlsx('co-est2019-annres.xlsx', skip = 3) -> pop_data
 
-### Cleaning Census data and joining with physician data -----------
+### Cleaning Census data and joining with physician data
 pop_data %>% 
   clean_names() %>% 
   rename('county'     = c(1),
@@ -30,16 +30,19 @@ pop_data %>%
   slice(-c(1, 3144:3149)) %>% 
   select(county, population) %>% 
   separate(county, c('county', 'state'), sep = ', ') %>% 
-  mutate(county = str_remove_all(county, '\\.| County')) %>% 
-  left_join(physicians) %>% 
-  mutate(phys_per_cap = num_physicians / population) -> phys_and_pop
+  filter(str_detect(state, 'Alaska|Hawaii') == FALSE) %>%   #Removing Alaska and Hawaii
+  mutate(county = str_remove_all(county, '\\.| County'),    #Removing unnecessary punctuation 
+         county = str_remove(county, ' Parish'),            #Removing "Parish" from Louisiana county names
+         county = str_replace(county, 'St |Ste ', 'St. '),  #Standardizing "Saint" abbreviation
+         county = str_replace(county, 'city', 'City')) %>%  #Capitalizing "C" in City
+  left_join(physicians) -> phys_and_pop
 
 ### Importing and cleaning COVID-19 data
 read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv") -> covid_data
 
 #filtering out by most recent date
 covid_data %>% 
-  filter(date == '2020-03-31') %>% 
+  filter(date == '2020-04-01') %>% 
   select(county, state, cases) %>% 
   right_join(phys_and_pop) %>% 
   mutate(cases = if_else(is.na(cases) == TRUE, 0, cases)) -> data_full
