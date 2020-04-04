@@ -18,7 +18,9 @@ read_csv('https://raw.githubusercontent.com/buczkowskir/COVID-19_severity_index/
 #Using built-in data for state abbreviation, and state region
 
 #State identifiers -- Changing Delaware and Maryland to "Northeast" region
-tibble(state = state.name, abb = state.abb, region = state.region) %>% 
+tibble(state  = state.name,
+       abb    = state.abb,
+       region = state.region) %>% 
   mutate(region = case_when(str_detect(state, 'Delaware|Maryland') == TRUE ~ 'Northeast',
                             TRUE ~ as.character(region))) %>% 
   right_join(data
