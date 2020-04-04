@@ -14,15 +14,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ##### Loading packages **tidyverse** - *for data management and data processing*, **extrafont** - *fonts for text on* **ggplot2** *visualizations*, **maps** - *for built-in "map" data sets within R*, and **ggmap** - *for expanded mapping functionality in* **ggplot2**
 
 ```{r, warning=FALSE, message=FALSE}
-#-------------------------------------------------------------------------------------#
-
-#### Rudimentary Mapping of COVID-19 data geographically ####
-
-# Ryan Buczkowski -- University of Mississippi -- Political Science Department
-
-# 4-03-2020
-
-#-------------------------------------------------------------------------------------#
 
 #Loading Libraries
 pacman::p_load('tidyverse', 'extrafont', 'maps', 'ggmap')
