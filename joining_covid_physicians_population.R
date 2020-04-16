@@ -42,7 +42,7 @@ read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-coun
 
 #filtering out by most recent date
 covid_data %>% 
-  filter(date == '2020-04-16') %>% 
+  filter(date == '2020-04-15') %>% 
   select(county, state, cases) %>% 
   right_join(phys_and_pop) %>% 
   mutate(cases = if_else(is.na(cases) == TRUE, 0, cases)) -> data_full
